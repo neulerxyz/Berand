@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "name": "beraWalletExtension",
+  "version": "1.0",
+  "description": "User-owned Bera SCWallet",
+  "permissions": ["storage", "activeTab", "tabs"],
+  "host_permissions": [
+      "<all_urls>",
+      "https://bartio.rpc.berachain.com/*"
+  ],
+  "action": {
+      "default_popup": "popup.html"
+  },
+  "background": {
+      "service_worker": "background.js",
+      "type": "module"
+  },
+  "web_accessible_resources": [{
+      "resources": ["piwik.js"],
+      "matches": ["<all_urls>"]
+  }],
+  "content_scripts": [{
+      "matches": ["<all_urls>"],
+      "js": ["piwik.js", "content.js"]
+  }],
+  "content_security_policy": {
+      "extension_pages": "script-src 'self'; object-src 'self'; connect-src 'self' https://bartio.rpc.berachain.com https://erq3gyqt71.execute-api.me-central-1.amazonaws.com;"
+  }
+}

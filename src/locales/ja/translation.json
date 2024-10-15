@@ -1,0 +1,61 @@
+{
+  "landing": {
+    "title": "YKYR",
+    "description": "First user-owned AI web analytics. Explore decentralized data insights.",
+    "createAccount": "アカウントを作成",
+    "tryAsGuest": "ゲストとして試す"
+  },
+  "setPassword": {
+    "title": "パスワードを設定",
+    "description": "このパスワードはこのデバイスでのみアカウントを解除します。YKYRはこのパスワードを回復できません。",
+    "password": "パスワード",
+    "confirmPassword": "パスワードの確認",
+    "submit": "送信",
+    "back": "戻る"
+  },
+  "downloadKey": {
+    "title": "プライベートキーをダウンロード",
+    "description": "このプライベートキーはあなたのマイナーアカウント用です。これはVONAネットワークにトランザクションを送信し、データが購入された際に報酬を得るために使用されます。",
+    "download": "ダウンロード",
+    "skip": "後でスキップ",
+    "back": "戻る",
+    "checks": [
+      "YKYRはあなたのキーを復元できません",
+      "YKYRはあなたのキーを保存できません",
+      "YKYRはあなたのデータを共有しません"
+    ]
+  },
+  "allSet": {
+    "title": "準備完了です！",
+    "welcome": "YKYRへようこそ 👾",
+    "startLogging": "ログを開始",
+    "stopLogging": "ログを停止",
+    "registerMiner": "マイナーを登録"
+  },
+  "popup": {
+    "enterPassword": "パスワードを入力",
+    "description": "プライベートキーをダウンロードするためにパスワードを入力してください",
+    "cancel": "キャンセル",
+    "ok": "OK"
+  },
+  "success": {
+    "title": "成功",
+    "message": "プライベートキーが正常にダウンロードされました 🥳",
+    "close": "閉じる"
+  },
+  "alerts": {
+    "requiredFields": "両方のパスワードフィールドが必要です。",
+    "passwordMismatch": "パスワードが一致しません。再試行してください。",
+    "passwordStrength": "パスワードは8文字以上で、大文字と数字を含める必要があります。",
+    "keysGenerated": "キーが正常に生成および暗号化されました。公開キーが保存されました。",
+    "keysFailed": "キーの生成に失敗しました：",
+    "decryptionFailed": "プライベートキーの復号に失敗しました。パスワードが正しいことを確認してください。",
+    "invalidAddress": "無効な報酬アドレスの形式です。",
+    "registerSuccess": "マイナーが正常に登録されました。",
+    "registerFailed": "マイナーの登録に失敗しました。",
+    "startLoggingFailed": "ログの開始に失敗しました。",
+    "stopLoggingFailed": "ログの停止に失敗しました。",
+    "generateKeysFailed": "キーの生成に失敗しました："
+  }
+}
+

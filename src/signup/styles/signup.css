@@ -1,0 +1,5 @@
+/* src/signup/styles/signup.css */
+.signup-component {
+  @apply p-8 bg-white;
+}
+

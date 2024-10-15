@@ -1,0 +1,61 @@
+{
+  "landing": {
+    "title": "YKYR",
+    "description": "First user-owned AI web analytics. Explore decentralized data insights.",
+    "createAccount": "Create Account",
+    "tryAsGuest": "Try as a Guest"
+  },
+  "setPassword": {
+    "title": "SET PASSWORD",
+    "description": "This password will unlock your account only on this device. YKYR cannot recover this pw.",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "submit": "Submit",
+    "back": "Back"
+  },
+  "downloadKey": {
+    "title": "DOWNLOAD PRIVATE KEY",
+    "description": "This private key is for your miner account. This will be submitting transaction to VONA network and get reward when your data has been purchased.",
+    "download": "Download",
+    "skip": "Skip for now",
+    "back": "Back",
+    "checks": [
+      "YKYR can't restore your key",
+      "YKYR can't store your key",
+      "YKYR won't share your data"
+    ]
+  },
+  "allSet": {
+    "title": "You're all set!",
+    "welcome": "Welcome to YKYR 👾",
+    "startLogging": "Start Logging",
+    "stopLogging": "Stop Logging",
+    "registerMiner": "Register Miner"
+  },
+  "popup": {
+    "enterPassword": "ENTER PASSWORD",
+    "description": "Enter your password to decrypt the private key for download",
+    "cancel": "Cancel",
+    "ok": "OK"
+  },
+  "success": {
+    "title": "SUCCESS",
+    "message": "Private key downloaded successfully 🥳",
+    "close": "Close"
+  },
+  "alerts": {
+    "requiredFields": "Both password fields are required.",
+    "passwordMismatch": "Passwords do not match. Please try again.",
+    "passwordStrength": "Password must be at least 8 characters long and include uppercase letters and numbers.",
+    "keysGenerated": "Keys generated and encrypted successfully. Public key stored.",
+    "keysFailed": "Failed to generate keys:",
+    "decryptionFailed": "Failed to decrypt the private key. Please ensure the password is correct.",
+    "invalidAddress": "Invalid reward address format.",
+    "registerSuccess": "Miner registered successfully.",
+    "registerFailed": "Failed to register miner.",
+    "startLoggingFailed": "Failed to start logging.",
+    "stopLoggingFailed": "Failed to stop logging.",
+    "generateKeysFailed": "Failed to generate keys:"
+  }
+}
+
