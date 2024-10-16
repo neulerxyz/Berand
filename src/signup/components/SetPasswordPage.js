@@ -30,9 +30,9 @@ const SetPasswordPage = ({
         </button>
         <h1 className="text-4xl font-bold text-white text-center mt-4 mb-4">SET PASSWORD</h1>
         <p className="text-xs text-gray-300 text-center mb-8">
-          This password will unlock your account<br />only on this device. YKYR cannot recover
-          <br />
-          this pw.
+          This password will unlock your account
+          <br />only on this device. 
+          <br />Berand cannot recover this password.
         </p>
       </div>
       <form onSubmit={onSubmit} className="space-y-6 flex-grow">
@@ -108,11 +108,6 @@ const SetPasswordPage = ({
             className="w-full h-12 bg-gray-500 text-white hover:bg-gray-600 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={!password || password !== confirmPassword}
           >
-            <div className="grid grid-cols-[repeat(11,1fr)] gap-1 mr-2">
-              {[...Array(11)].map((_, i) => (
-                <div key={i} className="w-2 h-2 bg-white"></div>
-              ))}
-            </div>
             <span className="text-xs">Submit</span>
           </button>
         </div>

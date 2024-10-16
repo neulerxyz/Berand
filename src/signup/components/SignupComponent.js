@@ -9,7 +9,7 @@ import EyeIcon from '../../shared/components/EyeIcon';
 
 const SignupComponent = () => {
 
-  // 状態管理
+  // state management
   const [currentPage, setCurrentPage] = useState('landing');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -56,9 +56,8 @@ const SignupComponent = () => {
   };
 
 
-  // ハンドラー関数
   const handleGenerateKeys = async () => {
-    // ネットワーク接続のチェック（ここでは省略）
+    // TODO: Checking network 
     setCurrentPage('setPassword');
   };
   
@@ -114,7 +113,7 @@ const SignupComponent = () => {
 
     // Function to download private key
     const downloadPrivateKeyFile = (privateKey, filename) => {
-    const fileContent = `-----BEGIN ECIES PRIVATE KEY-----\n${privateKey}\n-----END ECIES PRIVATE KEY-----`;
+    const fileContent = `-----BEGIN OPERATOR PRIVATE KEY-----\n${privateKey}\n-----END OPERATOR PRIVATE KEY-----`;
     const blob = new Blob([fileContent], { type: "text/plain" });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
@@ -149,20 +148,20 @@ const SignupComponent = () => {
     const decryptAndDownloadPrivateKey = async (password) => {
       console.log("decryptAndDownloadPrivateKey Function");
 
-      chrome.storage.local.get(['encryptedEciesPrivateKey', 'eciesEncryptionSalt', 'eciesEncryptionIV'], async (data) => {
-        const { encryptedEciesPrivateKey, eciesEncryptionSalt, eciesEncryptionIV } = data;
-        if (!encryptedEciesPrivateKey || !eciesEncryptionSalt || !eciesEncryptionIV) {
+      chrome.storage.local.get(['encryptedOperatorPrivateKey', 'operatorEncryptionSalt', 'operatorEncryptionIV'], async (data) => {
+        const { encryptedOperatorPrivateKey, operatorEncryptionSalt, operatorEncryptionIV } = data;
+        if (!encryptedOperatorPrivateKey || !operatorEncryptionSalt || !operatorEncryptionIV) {
             console.log("Encrypted private key data is missing.");
             return;
         }
         try {
-            console.log("Decryption process: Encrypted Private Key:", encryptedEciesPrivateKey);
-            console.log("Decryption process: Salt:", eciesEncryptionSalt, "IV:", eciesEncryptionIV);
+            console.log("Decryption process: Encrypted Private Key:", encryptedOperatorPrivateKey);
+            console.log("Decryption process: Salt:", operatorEncryptionSalt, "IV:", operatorEncryptionIV);
 
             // Convert hex to ArrayBuffer
-            const encryptedPrivateKeyBuffer = hexToArrayBuffer(encryptedEciesPrivateKey);
-            const saltBuffer = hexToArrayBuffer(eciesEncryptionSalt);
-            const ivBuffer = hexToArrayBuffer(eciesEncryptionIV);
+            const encryptedPrivateKeyBuffer = hexToArrayBuffer(encryptedOperatorPrivateKey);
+            const saltBuffer = hexToArrayBuffer(operatorEncryptionSalt);
+            const ivBuffer = hexToArrayBuffer(operatorEncryptionIV);
             // Derive the decryption key using the provided password
             const derivedKey = await deriveKeyFromPassword(password, saltBuffer);
             // Decrypt the private key
@@ -178,7 +177,7 @@ const SignupComponent = () => {
             const decryptedPrivateKey = uint8ArrayToHex(new Uint8Array(decryptedPrivateKeyBuffer));
             console.log("Decrypted Private Key:", decryptedPrivateKey);
             // Initiate download of the raw private key
-            downloadPrivateKeyFile(decryptedPrivateKey, "ecies-raw-private-key.txt");
+            downloadPrivateKeyFile(decryptedPrivateKey, "operator-raw-private-key.txt");
             console.log("Raw private key downloaded successfully.");
         } catch (error) {
             console.error('Error decrypting private key:', error);
@@ -260,8 +259,10 @@ const SignupComponent = () => {
       
           // Send a message to background.js to generate the keys with the password
           chrome.runtime.sendMessage({ action: "generateKeys", password: password }, (response) => {
+            console.log("signup response:",response);
             if (response && response.success) {
                 console.log("Keys generated, encrypted successfully, and miner registered!");
+                console.log("downloadBackupKey value:",downloadBackupKey);
                 handlePrivateKeyDownloadOptions(password);
                 setCurrentPage('allSet');
             } else {
@@ -270,10 +271,9 @@ const SignupComponent = () => {
         });
     };
 
-  // コンポーネントのレンダリング
   return (
-    <div className="press-start min-h-screen bg-[#1f1f1f] flex items-center justify-center p-4">
-      <div className="w-full max-w-[600px] h-[671px] bg-[#1f1f1f] border-4 border-white p-8 flex flex-col justify-between">
+    <div className="press-start min-h-screen bg-[#0000cc] flex items-center justify-center p-4">
+      <div className="w-full max-w-[600px] h-[671px] bg-[#0000cc] border-4 border-white p-8 flex flex-col justify-between">
         {currentPage === 'landing' && (
           <LandingPage
             onGenerateKeys={handleGenerateKeys}

@@ -1,23 +1,28 @@
-// ./src/signup/components/LoadingPage.js
 import React, { useEffect, useState } from 'react';
 
 const LoadingPage = () => {
   const [loadingProgress, setLoadingProgress] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
-    // シミュレーションのためにローディング進行を増加させます。
-    const interval = setInterval(() => {
+    const progressInterval = setInterval(() => {
       setLoadingProgress((prev) => {
         if (prev >= 100) {
-          clearInterval(interval);
-          // ローディング完了後の処理は親コンポーネントで行います。
+          clearInterval(progressInterval);
           return 100;
         }
         return prev + 12.5;
       });
-    }, 500); // 0.5秒ごとに進行
+    }, 500); // 0.5 sec for progress update
 
-    return () => clearInterval(interval);
+    const animationInterval = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % 8);
+    }, 125); // 0.125 sec for smoother animation
+
+    return () => {
+      clearInterval(progressInterval);
+      clearInterval(animationInterval);
+    };
   }, []);
 
   return (
@@ -28,7 +33,7 @@ const LoadingPage = () => {
           {[...Array(8)].map((_, i) => (
             <div
               key={i}
-              className={`absolute w-2 h-8 ${i === Math.floor(loadingProgress / 12.5) ? 'bg-white' : 'bg-gray-600'}`}
+              className={`absolute w-2 h-8 transition-colors duration-100 ${i === activeIndex ? 'bg-white' : 'bg-gray-600'}`}
               style={{
                 left: '50%',
                 top: '50%',

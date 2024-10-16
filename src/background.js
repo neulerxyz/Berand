@@ -377,12 +377,14 @@ async function handleGenerateAndRegister(password) {
 
         if (registerResponse.success) {
             console.log("Miner registered successfully:", registerResponse.data);
-            const nftContract = "0x1B2f6F88f2136AF58d943458826e7D67e98fF665"; //TODO change
-            const secretMessage = "giveMeAFreeDrinkBera"; //TODO CHANGE
-            const debugResponse = await handleClaimNFT(nftContract,secretMessage);//TODO Change
+            //const nftContract = "0x1B2f6F88f2136AF58d943458826e7D67e98fF665"; //TODO change
+            //const secretMessage = "giveMeAFreeDrinkBera"; //TODO CHANGE
+            //const debugResponse = await handleClaimNFT(nftContract,secretMessage);//TODO Change
+            /*
             if (debugResponse.success){
                 console.log("Successfully Minted DemoNFT: ",debugResponse.data);
             }
+            */
             return { success: true, minerData: registerResponse.data };
         } else {
             throw new Error("Miner registration failed: " + registerResponse.error);
@@ -461,6 +463,7 @@ async function handleClaimNFT(nftContract, secretMessage) {
         console.error("Error while claiming NFT:", error);
     }
 }
+  
 
 // #endregion 
 console.log("Background script loaded.");
@@ -483,9 +486,8 @@ chrome.runtime.onStartup.addListener(() => {
 });
 
 // Handle extension installation (reset tracking state to inactive)
-chrome.runtime.onInstalled.addListener(() => {
-    //
-});
+// chrome.runtime.onInstalled.addListener(() => {
+// });
 
 // Handle the case where Chrome is shutting down
 chrome.runtime.onSuspend.addListener(() => {
@@ -549,7 +551,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         console.log("Popup window created:", window);
         sendResponse({ success: true, windowId: window.id });
       });
-      // 非同期で応答することを示す
+      // 
       return true;
     }
   });

@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "beraWalletExtension",
-  "version": "1.0",
-  "description": "User-owned Bera SCWallet",
+  "name": "Berand",
+  "version": "0.1",
+  "description": "Your Lovely Rewards Hunter",
   "permissions": ["storage", "activeTab", "tabs"],
   "host_permissions": [
       "<all_urls>",

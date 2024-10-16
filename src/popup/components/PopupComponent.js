@@ -10,7 +10,27 @@ import { Wallet, Cog, Copy, Check } from "lucide-react"
 const PopupComponent = () => {
   
   //Berand
-  //const [walletAddress, setWalletAddress] = useState("0x1234...5678")
+  const [nftContract, setNftContract] = useState("0x1B2f6F88f2136AF58d943458826e7D67e98fF665");
+  const [secretMessage, setSecretMessage] = useState("giveMeAFreeDrinkBera");
+
+  const handleClaimClick = () => {
+    // background.jsにメッセージを送信する
+    chrome.runtime.sendMessage(
+      {
+        action: "claimNFT", // actionの識別子
+        nftContract: nftContract,
+        secretMessage: secretMessage
+      },
+      (response) => {
+        if (response && response.success) {
+          console.log("Successfully minted NFT:", response.data);
+        } else {
+          console.error("Failed to mint NFT:", response ? response.error : "Unknown error");
+        }
+      }
+    );
+  };
+
   const [isCopied, setIsCopied] = useState(false)
   const [showToast, setShowToast] = useState(false)
 
@@ -78,6 +98,13 @@ const PopupComponent = () => {
       }
     };
     fetchData();
+
+        // Restore last active tab
+        chrome.storage.local.get('activeTab', (data) => {
+          if (data.activeTab) {
+            setActiveTab(data.activeTab);
+          }
+        });
   
   }, []);
 
@@ -124,18 +151,37 @@ chrome.storage.onChanged.addListener((changes, area) => {
     });
   };
 
+  
+
   const handleTabClick = (tab) => {
     setActiveTab(tab);
-    setIsMenuOpen(false);
+    chrome.storage.local.set({ activeTab: tab });
   };
+
 
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
   const toggleStatus = () => setIsLogging((prev) => !prev);
 
+  const TruncateAddress = ({ address, maxLength = 12 }) => {
+    const truncatedAddress = (address) => {
+      if (address.length <= maxLength) {
+        return address;
+      }
+  
+      const prefix = address.slice(0, 6);
+      const suffix = address.slice(-4);
+      return `${prefix}...${suffix}`;
+    };
+  
+    return (
+        <span>{truncatedAddress(address)}</span>
+    );
+  };
+
 
  
   return (
-    <div className="w-[350px] h-[500px] bg-blue-600 text-white p-2 flex flex-col relative">
+    <div className="w-[350px] h-[500px] bg-[#0000cc] text-white p-2 flex flex-col relative">
       {/* Toast Notification */}
       {showToast && (
         <div className="absolute top-2 left-2 right-2 bg-white text-black p-2 rounded-md shadow-lg z-50 animate-in fade-in slide-in-from-top-5">
@@ -148,7 +194,7 @@ chrome.storage.onChanged.addListener((changes, area) => {
       <header className="flex justify-between items-center mb-2">
         <div className="flex items-center space-x-2">
           <span className="text-xl">🐻</span>
-          <h1 className="text-lg font-bold">BERAND</h1>
+          <h1 className="text-lg font-bold">Berand</h1>
         </div>
         <div className="flex items-center space-x-2">
         <a 
@@ -156,7 +202,7 @@ chrome.storage.onChanged.addListener((changes, area) => {
         target="_blank" 
         rel="noopener noreferrer"
       >
-        {scWalletAddress}
+        <TruncateAddress address={scWalletAddress} />
       </a>
           <Button variant="ghost" size="icon" className="h-6 w-6" onClick={copyToClipboard}>
             {isCopied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
@@ -168,7 +214,7 @@ chrome.storage.onChanged.addListener((changes, area) => {
       </header>
 
       {/* Tabs */}
-      <Tabs defaultValue="home" className="flex-grow flex flex-col">
+      <Tabs defaultValue="drop" className="flex-grow flex flex-col">
         <TabsList className="grid w-full grid-cols-3 h-8 mb-2">
           <TabsTrigger value="home" className="text-xs">HOME</TabsTrigger>
           <TabsTrigger value="drop" className="text-xs">DROP</TabsTrigger>
@@ -178,7 +224,7 @@ chrome.storage.onChanged.addListener((changes, area) => {
           <Card className="h-full flex flex-col bg-white text-black">
             <CardHeader className="pb-2">
               <CardTitle className="text-lg">Wallet</CardTitle>
-              <CardDescription>Your BERAND wallet overview</CardDescription>
+              <CardDescription>Your Berand wallet overview</CardDescription>
             </CardHeader>
             <CardContent className="flex-grow py-2">
               <div className="space-y-4">
@@ -207,11 +253,11 @@ chrome.storage.onChanged.addListener((changes, area) => {
             </CardHeader>
             <CardContent className="flex-grow overflow-y-auto py-2">
               <ul className="space-y-4">
-                {["Summer Collection", "Artist Collaboration"].map((campaign, index) => (
+                {["Berappuccino at Berabucks"].map((campaign, index) => (
                   <li key={index} className="border rounded-lg p-3">
                     <h3 className="font-bold text-sm">{campaign}</h3>
                     <p className="text-xs text-gray-500">Ends in 3 days</p>
-                    <Button className="mt-2 text-xs py-1 h-7" size="sm">Join Drop</Button>
+                    <Button className="mt-2 text-xs py-1 h-7" size="sm" onClick={handleClaimClick}>Join Drop</Button>
                   </li>
                 ))}
               </ul>
@@ -222,14 +268,14 @@ chrome.storage.onChanged.addListener((changes, area) => {
           <Card className="h-full flex flex-col bg-white text-black">
             <CardHeader className="pb-2">
               <CardTitle className="text-lg">Your NFT Collection</CardTitle>
-              <CardDescription>Browse your BERAND NFTs</CardDescription>
+              <CardDescription>Browse your Berand NFTs</CardDescription>
             </CardHeader>
             <CardContent className="flex-grow overflow-y-auto py-2">
               <div className="grid grid-cols-2 gap-3">
                 {[1, 2].map((nft) => (
                   <div key={nft} className="border rounded-lg p-2">
                     <div className="bg-gray-200 aspect-square rounded-md mb-2"></div>
-                    <p className="text-xs font-medium">BERAND #{nft}</p>
+                    <p className="text-xs font-medium">Berand #{nft}</p>
                   </div>
                 ))}
               </div>
