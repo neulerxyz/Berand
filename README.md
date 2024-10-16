@@ -1,12 +1,12 @@
-# Berand: A Chrome Extension for NFT Campaign Interaction
+# Berand: A Chrome Extension for Real Rewards Interaction
 
-Berand is a Chrome extension designed to seamlessly integrate users with our NFT ecosystem by generating a smart contract wallet (SCWallet). This SCWallet provides users with secure and automated interaction with NFT contracts, leveraging two Ethereum wallets: an **operator wallet** and a **proxy wallet**.
+Berand is a Chrome extension designed to seamlessly integrate users with our NFT ecosystem by generating a smart contract wallet (SCWallet). This SCWallet provides users with secure and automated interaction with NFT contracts, leveraging two Berachain wallets: an **operator wallet** and a **proxy wallet**.
 
 ## Key Components
 
 ### 1. SCWallet
-- **SCWallet** is a smart contract-based wallet generated for each user. It acts as the primary interface between the user and the NFT ecosystem, ensuring secure and efficient transactions.
-- The SCWallet is designed to interact with our ecosystem’s NFT contracts, allowing users to claim campaign NFTs or perform other operations with ease.
+- **SCWallet** is a smart contract-based wallet generated for each user. It acts as the primary interface between the user and the NFTs, ensuring secure and efficient transactions.
+- The SCWallet is designed to interact with NFT contracts, allowing users to claim campaign NFTs or perform other operations with ease.
 
 ### 2. Operator Wallet
 - The **operator wallet** is the wallt that owns the generated SCWallet.
@@ -23,7 +23,7 @@ Berand is a Chrome extension designed to seamlessly integrate users with our NFT
 - The operator wallet is securely encrypted using the user’s password, while the proxy wallet is available for limited, predefined transactions.
 
 ### 2. NFT Campaign Interaction
-- Users can participate in various NFT campaigns across the ecosystem by claiming NFTs through their SCWallet.
+- Users can participate in various NFT Campaign(Real Rewards) across the ecosystem by claiming NFTs through their SCWallet.
 - **Claiming an NFT** involves discovering a secret message provided in the campaign. Once the user finds the secret, they can use it to claim the NFT directly from the campaign’s smart contract.
 
 ## Current Status
@@ -31,6 +31,3 @@ Berand is a Chrome extension designed to seamlessly integrate users with our NFT
 - **Wallet Generation**: The extension currently generates a SCWallet with both the operator and proxy wallets for each user.
 - **NFT Claiming**: Users can claim any arbitrary campaign NFT by providing the correct secret message. This functionality is currently available for testing, and users can experience a smooth interaction with campaign NFTs.
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
