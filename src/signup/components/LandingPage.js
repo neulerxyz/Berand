@@ -5,7 +5,7 @@ const LandingPage = ({ onGenerateKeys, onTryGuest }) => {
   return (
     <>
       <div className="text-center">
-        <h1 className="text-6xl font-bold text-white mb-4">YKYR</h1>
+        <h1 className="text-6xl font-bold text-white mb-4">Berand</h1>
         <p className="text-xs text-gray-300 mb-8">
           First user-owned AI web analytics. Explore decentralized data insights.
         </p>

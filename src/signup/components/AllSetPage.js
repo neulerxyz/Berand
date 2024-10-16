@@ -8,16 +8,6 @@ const AllSetPage = ({
 }) => {
 
 
-const popupHandler = () => {
-          
-          chrome.runtime.sendMessage({ action: "openPopup" }, (response) => {
-            if (response && response.success) {
-              console.log("Popup window opened successfully.");
-            } else {
-              console.error("Failed to open popup window.");
-            }
-          });
-        };
 
   return (
     <div className="flex flex-col items-center justify-center h-full">
@@ -44,14 +34,6 @@ const popupHandler = () => {
       >
         <span className="text-xs">{isLogging ? 'Stop Logging' : 'Start Logging'}</span>
       </button>
-
-
-        <button
-          className="w-full h-12 bg-gray-500 text-white hover:bg-gray-600 mt-4"
-          onClick={popupHandler}
-        >
-          start
-        </button>
 
     </div>
   );

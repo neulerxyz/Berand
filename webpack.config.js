@@ -39,6 +39,7 @@ module.exports = {
   ],
   resolve: {
     alias: {
+      '@': path.resolve(__dirname, 'src'),
       Shared: path.resolve(__dirname, 'src/shared/'),
     },
     extensions: ['.js', '.jsx'],

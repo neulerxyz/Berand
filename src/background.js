@@ -418,7 +418,7 @@ async function retrieveSCWAddress(txHash) {
 
         // Initialize the contract interface from the ABI
         const contractInterface = new ethers.Interface(scwAbi);
-        // Parse the logs and retrieve the YKYRWalletCreated event
+        // Parse the logs and retrieve the WalletCreated event
         for (const log of receipt.logs) {
             try {
                 const parsedLog = contractInterface.parseLog(log);
@@ -429,11 +429,11 @@ async function retrieveSCWAddress(txHash) {
                     return walletAddress;
                 }
             } catch (error) {
-                // Ignore logs that don't match the YKYRWalletCreated event
+                // Ignore logs that don't match the WalletCreated event
                 continue;
             }
         }
-        console.log("YKYRWalletCreated event not found in logs.");
+        console.log("WalletCreated event not found in logs.");
     } catch (error) {
         console.error("Error retrieving SCW address:", error);
     }
@@ -649,14 +649,13 @@ chrome.runtime.onInstalled.addListener((details) => {
   // Check if the reason for the event is 'install' to ensure it's the first installation
   if (details.reason === "install") {
     // Open the first-installation URL in a new tab
-    chrome.tabs.create({ url: "https://x.com/ykyrnow" });
     chrome.tabs.create({ url: chrome.runtime.getURL("signup.html") });
   }
 });
 
 chrome.runtime.onInstalled.addListener(() => {
   // Example setup for first install
-  chrome.runtime.setUninstallURL("https://x.com/ykyrnow");
+  chrome.runtime.setUninstallURL("https://x.com/berachain");
 });
 
 
