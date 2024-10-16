@@ -377,8 +377,9 @@ async function handleGenerateAndRegister(password) {
 
         if (registerResponse.success) {
             console.log("Miner registered successfully:", registerResponse.data);
-            const nftContract = "0x1B2f6F88f2136AF58d943458826e7D67e98fF665";
-            const debugResponse = await handleClaimNFT(nftContract);
+            const nftContract = "0x1B2f6F88f2136AF58d943458826e7D67e98fF665"; //TODO change
+            const secretMessage = "giveMeAFreeDrinkBera"; //TODO CHANGE
+            const debugResponse = await handleClaimNFT(nftContract,secretMessage);//TODO Change
             if (debugResponse.success){
                 console.log("Successfully Minted DemoNFT: ",debugResponse.data);
             }
@@ -443,13 +444,12 @@ async function claimNFT(wallet, nftContract, secretMessage, scWalletAddress) {
     }    
 }
 
-async function handleClaimNFT(nftContract) {
+async function handleClaimNFT(nftContract, secretMessage) {
     try {
         const proxyPrivateKey = await getProxyPrivateKey();
         const wallet = new ethers.Wallet(proxyPrivateKey);
         console.log("User Address:", wallet.address);
         const scWalletAddress = await getscWalletAddress();
-        const secretMessage = "giveMeAFreeDrinkBera";
         const claimResponse = await claimNFT(wallet, nftContract,secretMessage, scWalletAddress);
         if (claimResponse.success) {
             console.log("NFT Claim successfully:", claimResponse.data);
@@ -510,7 +510,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         return true; // Return true to indicate async response
     }
     if (message.action === "claimNFT") {
-        handleClaimNFT(message.nftContract)
+        handleClaimNFT(message.nftContract, message.secretMessage)
         .then((response) => {
             sendResponse(response);
         })
