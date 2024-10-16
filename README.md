@@ -33,5 +33,5 @@ Berand is a Chrome extension designed to seamlessly integrate users with our NFT
 
 ## links 
 
-[BerandWallet SC](https://github.com/neulerxyz/berandWallet-SC) 
+[BerandWallet SC](https://github.com/neulerxyz/berandWallet-SC)   
 [BerandNFTForm](https://github.com/neulerxyz/berandNFTForm)
