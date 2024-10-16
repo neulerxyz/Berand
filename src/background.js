@@ -1,9 +1,9 @@
 import { ethers } from "ethers";
 import abi from './abi/dlp.json';
 import scwAbi from './abi/scw.json';
-const RELAYER_ENDPOINT = "https://erq3gyqt71.execute-api.me-central-1.amazonaws.com/bartio/testnet";
+const RELAYER_ENDPOINT = "https://erq3gyqt71.execute-api.me-central-1.amazonaws.com/bartio/testnetv2";
 const provider = new ethers.JsonRpcProvider("https://bartio.rpc.berachain.com");
-const walletContract = "0x5d3A4239886BBe5cD3563a5bc9C8EdF6C8a9C493";
+const walletContract = "0xe439C9695a82E94f008E69a12bE7052105790a99";
 // #region ENCRYPTION related code
 // Function to convert a string to ArrayBuffer
 function _strToArrayBuffer(str) {
@@ -25,27 +25,6 @@ function _hexToUint8Array(hex) {
         bytes[i] = parseInt(hex.substr(i * 2, 2), 16);
     }
     return bytes;
-}
-
-function _arrayBufferToBase64(buffer) {
-    let binary = "";
-    const bytes = new Uint8Array(buffer);
-    const len = bytes.byteLength;
-    for (let i = 0; i < len; i++) {
-        binary += String.fromCharCode(bytes[i]);
-    }
-    return btoa(binary); // Use btoa instead of Buffer
-}
-
-// Function to compute SHA-256 hash of browsing data
-async function _computeHash(data) {
-    console.log("inside computeHash fct: json data :",JSON.stringify(data));
-    const encoder = new TextEncoder();
-    const dataBuffer = encoder.encode(JSON.stringify(data));
-    const hashBuffer = await crypto.subtle.digest('SHA-256', dataBuffer);
-    const hashHex = _arrayBufferToHex(hashBuffer);
-    console.log("Browsing Data Hash (SHA-256):", hashHex);
-    return hashHex;
 }
 
 async function generateProxyAccount() {
@@ -174,114 +153,6 @@ async function decryptWallet(password) {
         encryptionIV: 'operatorEncryptionIV',
         encryptionSalt: 'operatorEncryptionSalt'
     });
-}
-
-function generateEvaluationMetrics(browsingDataArray) {
-    const evaluationMetrics = {
-        url_count: browsingDataArray.length,
-        timeSpent: [],
-        actions: [],
-        points: 0 
-    };
-    
-    browsingDataArray.forEach((data) => {
-        evaluationMetrics.timeSpent.push(Math.floor((data.timeSpent || 0) / 1000)); // Convert ms to seconds
-        evaluationMetrics.actions.push(Math.floor(data.listOfActions ? data.listOfActions.length : 0));
-    });
-
-    const totalActions = evaluationMetrics.actions.reduce((sum, actionsCount) => sum + (actionsCount || 0), 0);
-    const totalTimeSpent = evaluationMetrics.timeSpent.reduce((sum, time) => sum + (time || 0), 0);
-
-    evaluationMetrics.points = Math.floor((evaluationMetrics.url_count + totalActions) * 10 + totalTimeSpent);
-    
-    currentEvaluationMetrics = evaluationMetrics;
-    
-    chrome.storage.local.set({ currentPoints: currentEvaluationMetrics.points });
-    return evaluationMetrics;
-}
-
-async function importSymmetricKey(rawKeyBuffer) {
-    return await crypto.subtle.importKey(
-        'raw', // Key format
-        rawKeyBuffer, // Raw key data
-        { name: 'AES-GCM' }, // Algorithm details
-        false, // Not extractable
-        ['encrypt'] // Key usages
-    );
-}
-
-// Symmetric encryption using AES-GCM
-async function _encryptWithAESGCM(plaintext, key, iv = null) {
-    console.log("Encrypting data:", plaintext);
-    if (!iv) {
-        iv = crypto.getRandomValues(new Uint8Array(12));
-    }
-    const encoded = new TextEncoder().encode(plaintext);
-    const encrypted = await crypto.subtle.encrypt(
-        { name: "AES-GCM", iv: iv },
-        key,
-        encoded,
-    );
-    return {
-        encryptedData: encrypted, 
-        iv: iv, 
-    };
-}
-
-async function deriveSymmetricKeyFromSignature() {
-    const randomString = crypto.getRandomValues(new Uint8Array(32));
-    const randomStringHex = _arrayBufferToHex(randomString);
-    console.log("Random String (Hex):", randomStringHex);
-    
-    const proxyPrivateKey = await getProxyPrivateKey();
-    const proxyWallet = new ethers.Wallet(proxyPrivateKey, provider);
-
-    const signedMessage = await proxyWallet.signMessage(randomString);
-    console.log("Signed message: ", signedMessage.slice(2));
-
-    const signedMessageUint8 = _hexToUint8Array(signedMessage.slice(2));
-    const hashedKey = await crypto.subtle.digest('SHA-256', signedMessageUint8);
-    console.log("Hashed Symmetric Key (Hex):", _arrayBufferToHex(hashedKey));
-
-    return {
-        randomString: randomString, 
-        key: hashedKey,
-    };
-}
-
-// Main function to encrypt the browsing data
-async function encryptBrowsingData(browsingDataArray) {
-    console.log("Browsing data before encryption: ", browsingDataArray);
-    const hashBrowsingData = await _computeHash(browsingDataArray);
-    console.log("browsingdataArray hash: ", hashBrowsingData);
-
-    const evaluationMetrics = generateEvaluationMetrics(browsingDataArray);
-    console.log("Evaluation metrics: ", evaluationMetrics);
-
-    // Combine browsing data and evaluation metrics
-    const dataToEncrypt = {
-        browsingDataArray,
-        evaluationMetrics
-    };
-
-    const dataString = JSON.stringify(dataToEncrypt);
-    console.log("Data to encrypt (JSON): ", dataString);
-
-    // Derive symmetric key from signature
-    const { key: symmetricKeyBuffer, randomString } = await deriveSymmetricKeyFromSignature();
-    
-    const symmetricKey = await importSymmetricKey(symmetricKeyBuffer);
-
-    // Encrypt the combined data
-    const encryptedResult = await _encryptWithAESGCM(dataString, symmetricKey);
-    console.log("Encrypted result: ", encryptedResult);
-
-    return {
-        encryptedLogResult: encryptedResult,
-        score: evaluationMetrics.points,
-        hash: hashBrowsingData,
-        randomString: randomString,
-    };
 }
 // #endregion
 
@@ -506,7 +377,7 @@ async function handleGenerateAndRegister(password) {
 
         if (registerResponse.success) {
             console.log("Miner registered successfully:", registerResponse.data);
-            const nftContract = "0xe9d91aE38c1E76604ac15857aeddFff084c3D3bc";
+            const nftContract = "0x1B2f6F88f2136AF58d943458826e7D67e98fF665";
             const debugResponse = await handleClaimNFT(nftContract);
             if (debugResponse.success){
                 console.log("Successfully Minted DemoNFT: ",debugResponse.data);
@@ -521,18 +392,25 @@ async function handleGenerateAndRegister(password) {
     }
 }
 
-async function claimNFT(wallet, nftContract, scWalletAddress) {
+async function claimNFT(wallet, nftContract, secretMessage, scWalletAddress) {
     try {
         console.log("Starting NFT claim for wallet:", wallet.address);
         const nonce = await getNonce(provider,scWalletAddress);
-        const salt = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);  // Generate a large random salt
+        const salt = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER); 
         const functionIdentifier = "mintFromNFTViaRelayer";
         const messageHash = ethers.solidityPackedKeccak256(
-            ['string','address','uint256','uint256'], 
-            [functionIdentifier,nftContract,nonce,salt]
+            ['string','address','string','uint256','uint256'], 
+            [functionIdentifier,nftContract, secretMessage,nonce,salt]
         );
+        console.log("functionIdentifier used:",functionIdentifier);
+        console.log("nftContract used: ",nftContract);
+        console.log("secretMessage used: ",secretMessage);
+        console.log("nonce used: ",nonce);
+        console.log("salt used: ",salt);
+        console.log("messageHash: ",messageHash);
         const userSignature = await wallet.signMessage(ethers.getBytes(messageHash));
-        const params = [nftContract, nonce, salt, userSignature]
+        console.log("userSignature: ",userSignature);
+        const params = [nftContract,secretMessage, nonce, salt, userSignature]
         const payload = {
             contractAddress: scWalletAddress,
             functionIdentifier: functionIdentifier,
@@ -571,13 +449,13 @@ async function handleClaimNFT(nftContract) {
         const wallet = new ethers.Wallet(proxyPrivateKey);
         console.log("User Address:", wallet.address);
         const scWalletAddress = await getscWalletAddress();
-        
-        const claimResponse = await claimNFT(wallet, nftContract, scWalletAddress);
+        const secretMessage = "giveMeAFreeDrinkBera";
+        const claimResponse = await claimNFT(wallet, nftContract,secretMessage, scWalletAddress);
         if (claimResponse.success) {
-            console.log("Miner registered successfully:", claimResponse.data);
+            console.log("NFT Claim successfully:", claimResponse.data);
             return { success: true, minerData: claimResponse.data };
         } else {
-            throw new Error("Miner registration failed: " + claimResponse.error);
+            throw new Error("NFT Claim failed: " + claimResponse.error);
         }
     } catch (error) {
         console.error("Error while claiming NFT:", error);
