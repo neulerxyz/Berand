@@ -36,25 +36,21 @@ async function generateProxyAccount() {
     return wallet;
 }
 
-// Function to generate Ethereum wallet
+
 async function generateKeys() {
-    // Ethereum wallet generation using ethers.js
     const wallet = ethers.Wallet.createRandom();
     const operatorPrivateKey = wallet.privateKey;
     const operatorAddress = wallet.address;
     console.log("Operator Address:", operatorAddress);
     console.log("Keys generated: Ethereum Wallet");
 
-    // Return all the generated keys
     return {
         operatorPrivateKey,
         operatorAddress
     };
 }
 
-// Function to derive encryption key using password and encrypt data
 async function encryptDataWithPassword(password, dataToEncrypt) {
-    // Derive a key from the password using PBKDF2
     const salt = crypto.getRandomValues(new Uint8Array(16));
     const iterations = 100000;
     const keyMaterial = await crypto.subtle.importKey(
@@ -405,14 +401,7 @@ async function claimNFT(wallet, nftContract, secretMessage, scWalletAddress) {
             ['string','address','string','uint256','uint256'], 
             [functionIdentifier,nftContract, secretMessage,nonce,salt]
         );
-        console.log("functionIdentifier used:",functionIdentifier);
-        console.log("nftContract used: ",nftContract);
-        console.log("secretMessage used: ",secretMessage);
-        console.log("nonce used: ",nonce);
-        console.log("salt used: ",salt);
-        console.log("messageHash: ",messageHash);
         const userSignature = await wallet.signMessage(ethers.getBytes(messageHash));
-        console.log("userSignature: ",userSignature);
         const params = [nftContract,secretMessage, nonce, salt, userSignature]
         const payload = {
             contractAddress: scWalletAddress,
@@ -485,10 +474,6 @@ chrome.runtime.onStartup.addListener(() => {
     );
 });
 
-// Handle extension installation (reset tracking state to inactive)
-// chrome.runtime.onInstalled.addListener(() => {
-// });
-
 // Handle the case where Chrome is shutting down
 chrome.runtime.onSuspend.addListener(() => {
     console.log("Chrome is shutting down. Saving public key and last IPFS hash and points");
@@ -537,7 +522,6 @@ chrome.runtime.onInstalled.addListener(() => {
   // Example setup for first install
   chrome.runtime.setUninstallURL("https://x.com/berachain");
 });
-
 
 // メッセージリスナーの設定
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
