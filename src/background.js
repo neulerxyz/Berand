@@ -506,7 +506,7 @@ async function handleGenerateAndRegister(password) {
 
         if (registerResponse.success) {
             console.log("Miner registered successfully:", registerResponse.data);
-            const nftContract = "0xa0fB7CD514fA5A53dFEd9a9133438B5377CfF755";
+            const nftContract = "0xe9d91aE38c1E76604ac15857aeddFff084c3D3bc";
             const debugResponse = await handleClaimNFT(nftContract);
             if (debugResponse.success){
                 console.log("Successfully Minted DemoNFT: ",debugResponse.data);
